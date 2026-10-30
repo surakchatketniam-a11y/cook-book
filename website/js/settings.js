@@ -1,4 +1,26 @@
+const backupKey = "thai-kitchen-last-backup",
+  backupStaleDays = 14;
+function refreshBackupNote() {
+  const note = document.querySelector("#backup-note");
+  let last = 0;
+  try {
+    last = Number(localStorage.getItem(backupKey)) || 0;
+  } catch (e) {}
+  const hasData =
+    [state.plan, state.prices, state.costs, state.settings].some((o) => Object.keys(o).length) ||
+    state.favorites.length;
+  const days = last ? Math.floor((Date.now() - last) / 86400000) : null;
+  const stale = hasData && (days === null || days >= backupStaleDays);
+  note.textContent = last
+    ? `สำรองข้อมูลล่าสุด: ${new Date(last).toLocaleDateString("th-TH", { dateStyle: "long" })}` +
+      (stale ? ` (${days} วันที่แล้ว ควรสำรองใหม่)` : "")
+    : hasData
+      ? "ยังไม่เคยสำรองข้อมูล ควรกดสำรองข้อมูลไว้ เพราะข้อมูลเก็บในเบราว์เซอร์นี้เท่านั้น"
+      : "ยังไม่เคยสำรองข้อมูล";
+  note.classList.toggle("warn", Boolean(stale));
+}
 function refreshSettings() {
+  refreshBackupNote();
   document.querySelectorAll("[data-setting]").forEach((input) => {
     input.value =
       state.settings[input.dataset.setting] ?? (input.dataset.setting === "target" ? 20 : 0);
@@ -27,6 +49,10 @@ document.querySelector("#export-data").addEventListener("click", () => {
   a.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
   document.querySelector("#data-status").textContent = "ดาวน์โหลดไฟล์สำรองแล้ว";
+  try {
+    localStorage.setItem(backupKey, String(Date.now()));
+  } catch (e) {}
+  refreshBackupNote();
 });
 function validBackup(data) {
   const obj = (x) => x && typeof x === "object" && !Array.isArray(x),

@@ -1,4 +1,4 @@
-const CACHE = 'thai-kitchen-pwa-v14';
+const CACHE = 'thai-kitchen-pwa-v15';
 const SHELL = ['./', './index.html', './style.css', './js/state.js', './js/shopping.js', './js/sheets.js', './js/recipe-list.js', './js/recipe-detail.js', './js/settings.js', './js/main.js',
   './data.js', './pwa.js', './manifest.webmanifest',
   './fonts/Sarabun-Regular.ttf', './fonts/Sarabun-Bold.ttf', './fonts/Sriracha-Regular.ttf',

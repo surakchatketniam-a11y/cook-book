@@ -38,8 +38,13 @@ try {
     };
 } catch (e) {}
 function save() {
+  const warning = document.querySelector("#save-warning");
   try {
     localStorage.setItem(storageKey, JSON.stringify(state));
-  } catch (e) {}
+    warning.hidden = true;
+  } catch (e) {
+    warning.hidden = false;
+  }
+  if (typeof refreshBackupNote === "function") refreshBackupNote();
 }
 const quantity = (n) => Math.max(1, Math.min(10000, Math.floor(Number(n) || 1)));

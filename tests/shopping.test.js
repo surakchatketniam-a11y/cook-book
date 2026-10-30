@@ -14,10 +14,10 @@ function load() {
   dom.window.eval(
     read('data.js') +
       APP_FILES.map((f) => read(`js/${f}.js`)).join('\n') +
-      ';window.__t={recipes,shoppingItems,shoppingTotal,shoppingBudget,state:()=>state};'
+      ';window.__t={recipes,shoppingItems,shoppingTotal,shoppingBudget,save,refreshBackupNote,state:()=>state,doc:document};'
   );
   const t = dom.window.__t;
-  return { ...t, plan: (n) => (t.state().plan[t.recipes[0].id] = n) };
+  return { ...t, window: dom.window, plan: (n) => (t.state().plan[t.recipes[0].id] = n) };
 }
 
 test('empty plan gives empty shopping list and zero total', () => {
@@ -48,4 +48,34 @@ test('budget scales with box count', () => {
   const one = w.shoppingBudget();
   w.plan(2);
   assert.strictEqual(w.shoppingBudget(), one * 2);
+});
+
+test('save() shows a warning when storage is unavailable and hides it when it recovers', () => {
+  const w = load();
+  const warning = w.doc.querySelector('#save-warning');
+  const original = w.window.Storage.prototype.setItem;
+  w.window.Storage.prototype.setItem = () => {
+    throw new Error('quota');
+  };
+  w.save();
+  assert.strictEqual(warning.hidden, false);
+  w.window.Storage.prototype.setItem = original;
+  w.save();
+  assert.strictEqual(warning.hidden, true);
+});
+
+test('backup note warns when data exists and no backup was ever made', () => {
+  const w = load();
+  const note = w.doc.querySelector('#backup-note');
+  w.refreshBackupNote();
+  assert.ok(!note.classList.contains('warn'));
+  w.plan(1);
+  w.refreshBackupNote();
+  assert.ok(note.classList.contains('warn'));
+  w.window.localStorage.setItem('thai-kitchen-last-backup', String(Date.now()));
+  w.refreshBackupNote();
+  assert.ok(!note.classList.contains('warn'));
+  w.window.localStorage.setItem('thai-kitchen-last-backup', String(Date.now() - 20 * 86400000));
+  w.refreshBackupNote();
+  assert.ok(note.classList.contains('warn'));
 });
