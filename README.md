@@ -2,7 +2,9 @@
 
 เว็บไซต์สูตรอาหารไทย 20 เมนู พร้อมหนังสือและไฟล์ประกอบ
 
-- `website/` เว็บไซต์แบบ static
+- `website/` เว็บไซต์แบบ static (สคริปต์อยู่ใน `website/js/`)
+- `scripts/` สคริปต์ตอน deploy (`stamp-sw.js`)
+- `tests/` เทสต์ (`npm test`) ซึ่งรันใน GitHub Actions ทุกครั้งที่ push
 - `cookbook/` หนังสือ Word ที่จัดเก็บไว้
 - `assets/` ภาพและฟอนต์ต้นฉบับ
 - `source/` สคริปต์สร้างหนังสือและเตรียมข้อมูลเว็บไซต์
@@ -22,7 +24,7 @@ python source/build_pdf.py
 
 ผลลัพธ์อยู่ใน `generated/` สำหรับสร้าง PDF จาก HTML ให้ติดตั้ง Node.js, Playwright และ Chromium (`npm install --no-save playwright` และ `npx playwright install chromium`) แล้วรัน `node source/print_book.cjs` ไฟล์ PDF จะอยู่ที่ `generated/cookbook.pdf`
 
-`python source/prepare.py` ต้องใช้ Pillow และจะสร้างข้อมูลกับภาพเว็บใหม่ใน `website/` โปรดตรวจ diff ก่อน commit เพราะอาจเขียนทับข้อมูลและภาพที่ปรับไว้ สคริปต์ `add_nutrition.py` และ `enrich_book.py` เป็นสคริปต์แก้ไขต้นฉบับจากขั้นตอนเก่า ไม่จำเป็นสำหรับการสร้างหนังสือปัจจุบัน และจะเขียนทับสคริปต์อื่นหากรัน
+`python source/prepare.py` ต้องใช้ Pillow และจะสร้างข้อมูลกับภาพเว็บใหม่ใน `website/` โปรดตรวจ diff ก่อน commit เพราะอาจเขียนทับข้อมูลและภาพที่ปรับไว้ สคริปต์ `add_nutrition.py` และ `enrich_book.py` ย้ายไปไว้ที่ `source/legacy/` แล้ว เป็นสคริปต์แก้ไขต้นฉบับจากขั้นตอนเก่า ไม่จำเป็นสำหรับการสร้างหนังสือปัจจุบัน และจะเขียนทับสคริปต์อื่นหากรัน
 
 ไฟล์ PDF ฉบับเดิมมีขนาดเกิน 50 MiB จึงไม่อยู่ใน repository เวอร์ชันปัจจุบัน ไฟล์ทั้งหมดใน repository สาธารณะสามารถดาวน์โหลดได้
 
