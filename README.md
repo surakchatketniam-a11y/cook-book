@@ -8,7 +8,7 @@
 - `source/` สคริปต์สร้างหนังสือและเตรียมข้อมูลเว็บไซต์
 - `generated/` ผลลัพธ์ที่สร้างในเครื่อง (ไม่นำขึ้น Git)
 
-Vercel ใช้ `vercel.json` กำหนด output directory เป็น `website` โดย project root ต้องเป็นรากของ repository ไม่ต้องมี build command
+Vercel ใช้ `vercel.json` กำหนด output directory เป็น `website` โดย project root ต้องเป็นรากของ repository มี build command เพียง `node scripts/stamp-sw.js` (ไม่ติดตั้ง dependencies) เพื่อประทับเวอร์ชันแคชลง `sw.js`
 
 ## สร้างหนังสือ
 
@@ -30,4 +30,11 @@ python source/build_pdf.py
 
 เปิดเว็บไซต์ผ่าน HTTPS แล้วใช้เมนูติดตั้งของเบราว์เซอร์ บน iPhone/iPad ใช้ Safari → แชร์ → เพิ่มไปยังหน้าจอโฮม หลังเปิดเว็บครั้งแรกและดาวน์โหลดไฟล์ครบ จะเปิดสูตรและรายการซื้อแบบออฟไลน์ได้ ข้อมูลที่บันทึกไว้ยังอยู่เฉพาะเบราว์เซอร์/อุปกรณ์นั้น การล้างข้อมูลเว็บอาจลบข้อมูลและไฟล์ออฟไลน์
 
-Service worker ใช้ network-first สำหรับไฟล์เว็บไซต์และสำรองไฟล์ที่จำเป็นไว้ใน cache ควรเปลี่ยนชื่อเวอร์ชัน `CACHE` ใน `website/sw.js` เมื่อเปลี่ยนชุดไฟล์ที่เตรียมสำหรับออฟไลน์
+Service worker ใช้ network-first สำหรับไฟล์เว็บไซต์ (แคชแอปเก็บไว้ตอนติดตั้ง) ส่วนภาพสูตร 20 ภาพจะดาวน์โหลดเข้าแคชแยก (`thai-kitchen-img`) หลังติดตั้งเสร็จ และไม่ทำให้การติดตั้งล้มเหลว ชื่อแคชในไฟล์ที่ commit เป็น `thai-kitchen-pwa-dev` ตอน deploy `scripts/stamp-sw.js` จะแทนด้วย hash ของไฟล์ทั้งหมดอัตโนมัติ จึงไม่ต้องแก้เวอร์ชันด้วยมืออีก ไอคอน maskable สำหรับ Android อยู่ที่ `website/icons/icon-maskable-512.png`
+
+## ทดสอบ
+
+```sh
+npm install
+npm test
+```
