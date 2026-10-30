@@ -1,5 +1,5 @@
 from pathlib import Path
-p=Path('D:/www/cook-book/build_pdf.py')
+p=Path(__file__).resolve().parent/'build_pdf.py'
 s=p.read_text(encoding='utf-8-sig')
 s=s.replace("@font-face{font-family:Charmonman;src:url('fonts/Charmonman-Bold.ttf');font-weight:700}","@font-face{font-family:Sriracha;src:url('fonts/Sriracha-Regular.ttf');font-weight:700}")
 s=s.replace('font-family:Charmonman','font-family:Sriracha')
@@ -29,4 +29,4 @@ s=s.replace("content=['<!doctype html>","extra="+repr(extra)+"\ncontent=['<!doct
 s=s.replace("instructions=''.join(f'<li><span class=\"num\">{n:02}</span><span>{e(s)}</span></li>' for n,s in enumerate(steps.split('|'),1))", "prep,detail,serving=extra[i-1]\n instructions=''.join(f'<li><span class=\"num\">{n:02}</span><span>{e(s)}</span></li>' for n,s in enumerate(steps.split('|'),1))")
 s=s.replace('<div class="label">วิธีทำ</div><ol class="steps">{instructions}</ol><div class="label" style="margin-top:5mm">เคล็ดลับ</div><div class="notice">{e(tip)}</div>', '<div class="label">เตรียมก่อนปรุง</div><div class="notice" style="margin-bottom:4mm">{e(prep)}</div><div class="label">วิธีทำ</div><ol class="steps">{instructions}</ol><div class="label" style="margin-top:4mm">เคล็ดลับ</div><div class="notice">{e(detail)} {e(serving)}</div>')
 p.write_text(s,encoding='utf-8')
-p=Path('D:/www/cook-book/print_book.cjs'); s=p.read_text(encoding='utf-8-sig').replace('หนังสือสูตรอาหารไทย_ฉบับปรับฟอนต์.pdf','หนังสือสูตรอาหารไทย_ฉบับขยายสูตร.pdf'); p.write_text(s,encoding='utf-8')
+p=Path(__file__).resolve().parent/'print_book.cjs'; s=p.read_text(encoding='utf-8-sig').replace('หนังสือสูตรอาหารไทย_ฉบับปรับฟอนต์.pdf','หนังสือสูตรอาหารไทย_ฉบับขยายสูตร.pdf'); p.write_text(s,encoding='utf-8')

@@ -2,15 +2,26 @@
 
 เว็บไซต์สูตรอาหารไทย 20 เมนู พร้อมหนังสือและไฟล์ประกอบ
 
-- `website/` เว็บไซต์แบบ static และไฟล์ประกอบสำหรับเว็บ
-- `cookbook/` หนังสือฉบับ Word และ PDF
-- `assets/` ภาพอาหารและฟอนต์ต้นฉบับ
-- `source/` สคริปต์และ HTML ที่ใช้สร้างหนังสือและเตรียมข้อมูลเว็บ
+- `website/` เว็บไซต์แบบ static
+- `cookbook/` หนังสือ Word ที่จัดเก็บไว้
+- `assets/` ภาพและฟอนต์ต้นฉบับ
+- `source/` สคริปต์สร้างหนังสือและเตรียมข้อมูลเว็บไซต์
+- `generated/` ผลลัพธ์ที่สร้างในเครื่อง (ไม่นำขึ้น Git)
 
 Vercel ใช้ `vercel.json` กำหนด output directory เป็น `website` โดย project root ต้องเป็นรากของ repository ไม่ต้องมี build command
 
-สคริปต์ใน `source/` เก็บไว้เป็นต้นฉบับจากขั้นตอนสร้างเดิม บางไฟล์อ้างถึง `D:/www/cook-book` และตำแหน่งไฟล์เดิม หรือแก้ไขสคริปต์อื่นโดยตรง จึงต้องปรับ path และตรวจการทำงานก่อนนำไปรันในสภาพแวดล้อมใหม่ โดยต้องมี dependencies ที่เกี่ยวข้อง เช่น python-docx, Pillow หรือ Playwright ตามสคริปต์ที่ใช้
+## สร้างหนังสือ
 
-ไฟล์ใน repository สาธารณะนี้สามารถดาวน์โหลดได้ทั้งหมด
+ติดตั้ง Python 3 และแพ็กเกจ `python-docx` จากนั้นรันจากราก repository:
 
-ไฟล์ PDF ฉบับปกอาหารหลากหลายมีขนาดเกิน 50 MiB จึงไม่ได้เก็บไว้ใน repository เวอร์ชันปัจจุบัน โดยไฟล์ต้นฉบับยังอยู่ในเครื่อง
+```sh
+python source/create_book.py
+python source/add_images.py
+python source/build_pdf.py
+```
+
+ผลลัพธ์อยู่ใน `generated/` สำหรับสร้าง PDF จาก HTML ให้ติดตั้ง Node.js, Playwright และ Chromium (`npm install --no-save playwright` และ `npx playwright install chromium`) แล้วรัน `node source/print_book.cjs` ไฟล์ PDF จะอยู่ที่ `generated/cookbook.pdf`
+
+`python source/prepare.py` ต้องใช้ Pillow และจะสร้างข้อมูลกับภาพเว็บใหม่ใน `website/` โปรดตรวจ diff ก่อน commit เพราะอาจเขียนทับข้อมูลและภาพที่ปรับไว้ สคริปต์ `add_nutrition.py` และ `enrich_book.py` เป็นสคริปต์แก้ไขต้นฉบับจากขั้นตอนเก่า ไม่จำเป็นสำหรับการสร้างหนังสือปัจจุบัน และจะเขียนทับสคริปต์อื่นหากรัน
+
+ไฟล์ PDF ฉบับเดิมมีขนาดเกิน 50 MiB จึงไม่อยู่ใน repository เวอร์ชันปัจจุบัน ไฟล์ทั้งหมดใน repository สาธารณะสามารถดาวน์โหลดได้

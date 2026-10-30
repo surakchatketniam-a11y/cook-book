@@ -1,3 +1,4 @@
+from pathlib import Path
 from docx import Document
 from docx.shared import Cm, Pt, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
@@ -61,4 +62,6 @@ for i,(name,time,ing,steps,cost,price,tip) in enumerate(recipes,1):
  t.style='Table Grid'
  doc.add_paragraph(f'ราคาขายแนะนำ {price} บาท  |  ส่วนต่างก่อนค่าใช้จ่ายอื่น {price-total} บาท')
  doc.add_paragraph('เคล็ดลับ: '+tip)
-doc.save('หนังสือสูตรอาหารไทย_20เมนู.docx')
+out=Path(__file__).resolve().parent.parent/'generated'
+out.mkdir(exist_ok=True)
+doc.save(out/'หนังสือสูตรอาหารไทย_20เมนู.docx')
