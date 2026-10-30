@@ -168,8 +168,14 @@ document.querySelector("#clear-checked").addEventListener("click", () => {
   save();
   renderPlan();
 });
-document.querySelector("#reset-shopping").addEventListener("click", () => {
-  if (!confirm("เริ่มรอบซื้อใหม่? เมนู ราคาซื้อ และเครื่องหมายติ๊กของรอบปัจจุบันจะถูกล้าง")) return;
+document.querySelector("#reset-shopping").addEventListener("click", async () => {
+  if (
+    !(await askConfirm(
+      "เริ่มรอบซื้อใหม่? เมนู ราคาซื้อ และเครื่องหมายติ๊กของรอบปัจจุบันจะถูกล้าง",
+      "เริ่มรอบใหม่",
+    ))
+  )
+    return;
   state.plan = {};
   state.prices = {};
   state.checked = {};
@@ -234,4 +240,3 @@ document.querySelector("#print-book").addEventListener("click", () => {
     .join("");
   window.print();
 });
-

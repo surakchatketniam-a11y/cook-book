@@ -122,7 +122,8 @@ document.querySelector("#import-data").addEventListener("change", async (e) => {
     if (file.size > 2 * 1024 * 1024) throw Error("ไฟล์มีขนาดใหญ่เกินไป");
     const data = JSON.parse(await file.text());
     if (!validBackup(data)) throw Error("รูปแบบไฟล์ไม่ถูกต้อง");
-    if (!confirm("กู้คืนข้อมูลจากไฟล์นี้? ข้อมูลปัจจุบันจะถูกแทนที่")) return;
+    if (!(await askConfirm("กู้คืนข้อมูลจากไฟล์นี้? ข้อมูลปัจจุบันจะถูกแทนที่", "กู้คืนข้อมูล")))
+      return;
     state = data.state;
     state.channels = state.channels || [];
     state.shoppingKeysVersion = state.shoppingKeysVersion === 3 ? 3 : undefined;

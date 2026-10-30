@@ -221,7 +221,7 @@ function renderPlan() {
             `<div class="plan-row"><strong>${r.name}</strong><label>จำนวนกล่อง <input type="number" min="1" max="10000" step="1" value="${state.plan[r.id]}" data-plan-qty="${r.id}"></label><button type="button" class="remove-plan" data-remove="${r.id}">นำออก</button></div>`,
         )
         .join("")
-    : "<p>ยังไม่มีเมนูในรายการ กดเพิ่มลงรายการซื้อที่การ์ดเมนูหรือในหน้าสูตร</p>";
+    : '<p class="empty-plan">ยังไม่มีเมนูในรายการ กดเพิ่มลงรายการซื้อที่การ์ดเมนูหรือในหน้าสูตร <a href="#recipes">เลือกเมนูที่อยากทำ →</a></p>';
   const items = shoppingItems(),
     groups = ["เนื้อสัตว์และไข่", "ผักสด", "เครื่องปรุงและอื่น ๆ"];
   document.querySelector("#shopping-list").innerHTML = items.length

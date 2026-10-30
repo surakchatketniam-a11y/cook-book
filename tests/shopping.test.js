@@ -5,7 +5,7 @@ const path = require('node:path');
 const { JSDOM } = require('jsdom');
 
 const root = path.join(__dirname, '..', 'website');
-const APP_FILES = ["state", "shopping", "sheets", "recipe-list", "recipe-detail", "settings", "main"];
+const APP_FILES = ["state", "confirm", "shopping", "sheets", "recipe-list", "recipe-detail", "settings", "main"];
 const read = (f) => fs.readFileSync(path.join(root, f), 'utf8');
 
 function load() {

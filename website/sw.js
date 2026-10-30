@@ -1,6 +1,6 @@
 const CACHE = 'thai-kitchen-pwa-dev';
 const IMAGE_CACHE = 'thai-kitchen-img';
-const CORE = ['./', './index.html', './style.css', './js/state.js', './js/shopping.js', './js/sheets.js',
+const CORE = ['./', './index.html', './style.css', './js/state.js', './js/confirm.js', './js/shopping.js', './js/sheets.js',
   './js/recipe-list.js', './js/recipe-detail.js', './js/settings.js', './js/main.js', './data.js', './pwa.js',
   './manifest.webmanifest', './fonts/Sarabun-Regular.woff2', './fonts/Sarabun-Bold.woff2', './fonts/Sriracha-Regular.woff2',
   './icons/icon-180.png', './icons/icon-192.png', './icons/icon-512.png', './icons/icon-maskable-512.png'];

@@ -328,11 +328,12 @@ function openRecipe(r, sharedQuantity = null) {
     detail.querySelector("#target-margin").value = state.settings.target ?? 20;
     update();
   });
-  detail.querySelector("#reset-calculator").addEventListener("click", () => {
+  detail.querySelector("#reset-calculator").addEventListener("click", async () => {
     if (
-      !confirm(
+      !(await askConfirm(
         "รีเซ็ตต้นทุนและราคาขายของเมนูนี้? ค่าที่ปรับไว้สำหรับเมนูนี้จะถูกลบ และจะใช้ค่าเริ่มต้นของร้าน",
-      )
+        "รีเซ็ต",
+      ))
     )
       return;
     delete state.costs[r.id];

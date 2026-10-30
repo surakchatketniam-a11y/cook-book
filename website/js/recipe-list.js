@@ -29,6 +29,10 @@ function render() {
           : r.ingredients.some((x) => x.includes(filter)))) &&
       (r.name + " " + r.ingredients.join(" ")).toLowerCase().includes(query),
   );
+  const sortKey = document.querySelector("#sort").value;
+  if (sortKey === "cost") found.sort((a, b) => recipeCost(a) - recipeCost(b) || a.id - b.id);
+  if (sortKey === "time")
+    found.sort((a, b) => parseInt(a.time, 10) - parseInt(b.time, 10) || a.id - b.id);
   count.textContent = `${found.length} เมนู`;
   empty.hidden = found.length !== 0;
   grid.innerHTML = found
@@ -46,6 +50,7 @@ document.querySelector("#favorites-filter").addEventListener("click", (e) => {
   render();
 });
 search.addEventListener("input", render);
+document.querySelector("#sort").addEventListener("change", render);
 document.querySelector("#search-link").addEventListener("click", (e) => {
   e.preventDefault();
   document.querySelector(".recipe-controls").scrollIntoView({ behavior: "smooth", block: "start" });
