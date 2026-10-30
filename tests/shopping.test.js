@@ -14,7 +14,7 @@ function load() {
   dom.window.eval(
     read('data.js') +
       APP_FILES.map((f) => read(`js/${f}.js`)).join('\n') +
-      ';window.__t={recipes,shoppingItems,shoppingTotal,shoppingBudget,save,refreshBackupNote,state:()=>state,doc:document};'
+      ';window.__t={recipes,shoppingItems,shoppingTotal,shoppingBudget,recipeAllergens,openRecipe,save,refreshBackupNote,state:()=>state,doc:document};'
   );
   const t = dom.window.__t;
   return { ...t, window: dom.window, plan: (n) => (t.state().plan[t.recipes[0].id] = n) };
@@ -78,4 +78,25 @@ test('backup note warns when data exists and no backup was ever made', () => {
   w.window.localStorage.setItem('thai-kitchen-last-backup', String(Date.now() - 20 * 86400000));
   w.refreshBackupNote();
   assert.ok(note.classList.contains('warn'));
+});
+
+test('allergen summary flags gluten, coconut and egg where the ingredients imply them', () => {
+  const w = load();
+  const byName = (name) => w.recipes.find((r) => r.name.includes(name));
+  assert.match(w.recipeAllergens(byName('กะเพราหมูสับ')), /ไข่/);
+  assert.match(w.recipeAllergens(byName('กะเพราหมูสับ')), /กลูเตน/);
+  assert.match(w.recipeAllergens(byName('แกงเขียวหวาน')), /มะพร้าว/);
+});
+
+test('recipe page shows the allergen box with the disclaimer', () => {
+  const w = load();
+  w.openRecipe(w.recipes[0]);
+  const box = w.doc.querySelector('.allergen-box');
+  assert.ok(box, 'allergen box rendered');
+  assert.match(box.textContent, /แจ้งลูกค้าที่แพ้อาหาร/);
+});
+
+test('price reference date is shown in the closing note', () => {
+  const w = load();
+  assert.match(w.doc.querySelector('#price-date').textContent, /ตุลาคม 2569/);
 });

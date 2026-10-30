@@ -35,3 +35,4 @@
 .empty-plan a{color:#95502e;font-weight:700}
 .confirm-dialog{width:min(420px,92vw);padding:24px;border-radius:4px}.confirm-dialog p{margin:0 0 20px;line-height:1.7}.confirm-actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap}.confirm-actions .action{min-height:44px}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}*,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important}}
+.allergen-box{background:#f6e9dc;border-left:4px solid #95502e;padding:15px 18px;margin-top:24px}.allergen-box p{margin:6px 0;font-weight:700}

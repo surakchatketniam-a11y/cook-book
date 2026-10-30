@@ -1,4 +1,5 @@
 refreshSettings();
+document.querySelector("#price-date").textContent = `(ราคาอ้างอิงเมื่อ${PRICE_DATA_DATE}) `;
 migrateShopping();
 renderPlan();
 dialog.addEventListener("click", (e) => {

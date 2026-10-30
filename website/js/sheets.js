@@ -96,6 +96,9 @@ function recipeAllergens(r) {
   if (/เม็ดมะม่วง|ถั่ว/.test(r.name + " " + r.serving) || /เม็ดมะม่วง/.test(text))
     list.push("ถั่ว/เม็ดมะม่วงหิมพานต์");
   if (/เต้าเจี้ยว|เต้าหู้|ซีอิ๊ว/.test(text)) list.push("ถั่วเหลือง");
+  if (/ซีอิ๊ว|ซอสหอยนางรม|น้ำพริกเผา|ผงพะโล้|ผงกะหรี่/.test(text))
+    list.push("ข้าวสาลี/กลูเตน (ในซอสและเครื่องปรุง)");
+  if (/กะทิ/.test(text)) list.push("มะพร้าว");
   if (/ซอสหอยนางรม/.test(text)) list.push("หอยนางรม");
   if (/น้ำปลา|พริกแกง/.test(text)) list.push("ปลา/กะปิ");
   return list.length ? list.join(", ") : "โปรดตรวจจากวัตถุดิบจริง";
