@@ -1,0 +1,16 @@
+{
+  "id": "./",
+  "name": "ครัวอาหารไทย สูตรทำขาย",
+  "short_name": "ครัวอาหารไทย",
+  "description": "สูตรอาหารไทย เครื่องคำนวณต้นทุน และรายการซื้อวัตถุดิบ",
+  "lang": "th",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f5ed",
+  "theme_color": "#20382d",
+  "icons": [
+    {"src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+  ]
+}
