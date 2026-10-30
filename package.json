@@ -1,0 +1,12 @@
+{
+  "name": "thai-kitchen-cookbook",
+  "private": true,
+  "scripts": {
+    "format": "prettier --print-width 100 --write website/js/*.js",
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "jsdom": "^26.0.0",
+    "prettier": "^3.0.0"
+  }
+}
