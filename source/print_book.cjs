@@ -1,0 +1,4 @@
+const {chromium}=require('playwright');
+(async()=>{const browser=await chromium.launch({executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true,args:['--no-sandbox','--allow-file-access-from-files']}); const page=await browser.newPage(); await page.goto('file:///D:/www/cook-book/cookbook_print.html',{waitUntil:'networkidle'}); await page.pdf({path:'D:/www/cook-book/หนังสือสูตรอาหารไทย_ปกอาหารหลากหลาย.pdf',format:'A4',printBackground:true,preferCSSPageSize:true}); console.log(await page.evaluate(()=>Array.from(document.querySelectorAll('.recipe')).map((el,i)=>({i:i+1,bodyBottom:el.querySelector('.body').getBoundingClientRect().bottom,costTop:el.querySelector('.nutrition').getBoundingClientRect().top})).filter(x=>x.bodyBottom>x.costTop))); await browser.close()})().catch(e=>{console.error(e);process.exit(1)});
+
+
