@@ -1,4 +1,4 @@
-const CACHE = 'thai-kitchen-pwa-v12';
+const CACHE = 'thai-kitchen-pwa-v13';
 const SHELL = ['./', './index.html', './style.css', './app.js', './data.js', './pwa.js', './manifest.webmanifest',
   './fonts/Sarabun-Regular.ttf', './fonts/Sarabun-Bold.ttf', './fonts/Sriracha-Regular.ttf',
   './icons/icon-180.png', './icons/icon-192.png', './icons/icon-512.png', './images/cover.webp',
@@ -16,12 +16,18 @@ self.addEventListener('fetch', event => {
     const cache = await caches.open(CACHE);
     try {
       const response = await fetch(request);
-      if (response.ok && new URL(request.url).search === '' && SHELL.some(path => new URL(path, self.registration.scope).href === request.url)) await cache.put(request, response.clone());
+      if (response.ok) {
+        if (request.mode === 'navigate') {
+          await cache.put('./index.html', response.clone());
+        } else if (new URL(request.url).search === '' && SHELL.some(path => new URL(path, self.registration.scope).href === request.url)) {
+          await cache.put(request, response.clone());
+        }
+      }
       return response;
     } catch (error) {
       const cached = await cache.match(request, {ignoreSearch: true});
       if (cached) return cached;
-      if (request.mode === 'navigate') return (await cache.match('./index.html')) || Response.error();
+      if (request.mode === 'navigate') return (await cache.match('./index.html')) || (await cache.match('./')) || Response.error();
       return Response.error();
     }
   })());
