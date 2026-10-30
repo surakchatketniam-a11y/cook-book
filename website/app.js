@@ -23,7 +23,7 @@ function shoppingText(){
   return [...items.entries()].map(([key,item])=>{
     const [name,unit]=key.split('|');
     const breakdown=item.preparations.size?' ('+[...item.preparations].map(([prep,amount])=>`${prep} ${fmt(amount)} ${unit}`).join(' / ')+')':'';
-    const volume=unit==='ช้อนโต๊ะ'?` (${fmt(item.amount*15)} ซีซี)`:'';
+    const volume=unit==='ช้อนโต๊ะ'?` (${fmt(item.amount*15)} ซีซี)`:unit==='ช้อนชา'?` (${fmt(item.amount*5)} ซีซี)`:'';
     return `${name} ${fmt(item.amount)} ${unit}${volume}${breakdown}`;
   }).concat(unparsed).join('\n');
 }
