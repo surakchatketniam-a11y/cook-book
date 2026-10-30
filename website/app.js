@@ -23,7 +23,8 @@ function shoppingText(){
   return [...items.entries()].map(([key,item])=>{
     const [name,unit]=key.split('|');
     const breakdown=item.preparations.size?' ('+[...item.preparations].map(([prep,amount])=>`${prep} ${fmt(amount)} ${unit}`).join(' / ')+')':'';
-    return `${name} ${fmt(item.amount)} ${unit}${breakdown}`;
+    const volume=unit==='ช้อนโต๊ะ'?` (${fmt(item.amount*15)} ซีซี)`:'';
+    return `${name} ${fmt(item.amount)} ${unit}${volume}${breakdown}`;
   }).concat(unparsed).join('\n');
 }
 function renderPlan(){const selected=recipes.filter(r=>state.plan[r.id]);document.querySelector('#plan-count').textContent=selected.length;document.querySelector('#plan').innerHTML=selected.length?selected.map(r=>`<div class="plan-row"><strong>${r.name}</strong><label>จำนวนกล่อง <input type="number" min="1" max="10000" step="1" value="${state.plan[r.id]}" data-plan-qty="${r.id}"></label><button type="button" class="remove-plan" data-remove="${r.id}">นำออก</button></div>`).join(''):'<p>ยังไม่มีเมนูในรายการ เปิดสูตรแล้วกดเพิ่มลงรายการซื้อ</p>';const list=shoppingText();document.querySelector('#shopping-list').innerHTML=list?'<h3>วัตถุดิบรวม</h3><ul>'+list.split('\n').map(item=>`<li>${item}</li>`).join('')+'</ul>':'';document.querySelector('#copy-list').hidden=!list;document.querySelector('#print-list').hidden=!list;}
