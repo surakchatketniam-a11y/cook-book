@@ -2,10 +2,9 @@ const CACHE = 'thai-kitchen-pwa-dev';
 const IMAGE_CACHE = 'thai-kitchen-img';
 const CORE = ['./', './index.html', './style.css', './js/state.js', './js/shopping.js', './js/sheets.js',
   './js/recipe-list.js', './js/recipe-detail.js', './js/settings.js', './js/main.js', './data.js', './pwa.js',
-  './manifest.webmanifest', './fonts/Sarabun-Regular.ttf', './fonts/Sarabun-Bold.ttf', './fonts/Sriracha-Regular.ttf',
-  './icons/icon-180.png', './icons/icon-192.png', './icons/icon-512.png', './icons/icon-maskable-512.png',
-  './images/cover.webp'];
-const RECIPE_IMAGES = Array.from({length:20}, (_, i) => `./images/${String(i+1).padStart(2,'0')}.webp`);
+  './manifest.webmanifest', './fonts/Sarabun-Regular.woff2', './fonts/Sarabun-Bold.woff2', './fonts/Sriracha-Regular.woff2',
+  './icons/icon-180.png', './icons/icon-192.png', './icons/icon-512.png', './icons/icon-maskable-512.png'];
+const RECIPE_IMAGES = ['./images/cover.webp', './images/cover-800.webp'].concat(Array.from({length:20}, (_, i) => `./images/${String(i+1).padStart(2,'0')}-480.webp`).concat(Array.from({length:20}, (_, i) => `./images/${String(i+1).padStart(2,'0')}.webp`)));
 const imagesPath = new URL('./images/', self.registration.scope).pathname;
 const isCore = url => CORE.some(path => new URL(path, self.registration.scope).href === url);
 

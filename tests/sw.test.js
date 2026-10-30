@@ -73,16 +73,16 @@ test('install precaches only the app shell, not the 20 recipe photos', async () 
   await sw.dispatch('install', {});
   const core = await (await sw.caches.open('thai-kitchen-pwa-dev')).keys();
   assert.ok(core.some((u) => u.endsWith('/js/main.js')));
-  assert.ok(core.some((u) => u.endsWith('/images/cover.webp')));
+  assert.ok(core.some((u) => u.endsWith('/fonts/Sarabun-Regular.woff2')));
   assert.ok(core.some((u) => u.endsWith('/icons/icon-maskable-512.png')));
-  assert.ok(!core.some((u) => /images\/\d\d\.webp/.test(u)));
+  assert.ok(!core.some((u) => u.includes('/images/')));
 });
 
 test('warm-images message fills the separate image cache', async () => {
   const sw = load();
   await sw.dispatch('message', { data: 'warm-images' });
   const imgs = await (await sw.caches.open('thai-kitchen-img')).keys();
-  assert.strictEqual(imgs.length, 20);
+  assert.strictEqual(imgs.length, 42);
 });
 
 test('activate removes old versioned caches but keeps the image cache', async () => {
