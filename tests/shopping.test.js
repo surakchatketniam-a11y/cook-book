@@ -106,7 +106,7 @@ test('new categories filter recipes, open details, and add to shopping plan', ()
   for (const [category, name, id] of [['ต้ม', 'ต้มข่าไก่', 24], ['ยำ', 'ยำแตงกุ้งสด', 25], ['ขนม', 'ฟักทองแกงบวด', 26]]) {
     w.doc.querySelector(`[data-filter="${category}"]`).click();
     const cards = [...w.doc.querySelectorAll('#grid .card')];
-    assert.strictEqual(cards.length, 2);
+    assert.strictEqual(cards.length, 12);
     assert.ok(cards.some(card => card.textContent.includes(name)));
     const card = w.doc.querySelector(`.card[data-id="${id}"]`);
     assert.ok(fs.existsSync(path.join(root, card.querySelector('img').getAttribute('src'))));

@@ -82,7 +82,7 @@ test('warm-images message fills the separate image cache', async () => {
   const sw = load();
   await sw.dispatch('message', { data: 'warm-images' });
   const imgs = await (await sw.caches.open('thai-kitchen-img')).keys();
-  assert.strictEqual(imgs.length, 54);
+  assert.strictEqual(imgs.length, 114);
 });
 
 test('activate removes old versioned caches but keeps the image cache', async () => {
