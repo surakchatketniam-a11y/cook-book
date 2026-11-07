@@ -24,8 +24,8 @@ function render() {
     (r) =>
       (!favoritesOnly || state.favorites.includes(r.id)) &&
       (filter === "ทั้งหมด" ||
-        (filter === "แกง"
-          ? r.name.includes("แกง")
+        (["แกง", "ต้ม", "ยำ", "ขนม"].includes(filter)
+          ? (r.category === filter || (filter === "แกง" && r.name.includes("แกง")))
           : r.ingredients.some((x) => x.includes(filter)))) &&
       (r.name + " " + r.ingredients.join(" ")).toLowerCase().includes(query),
   );
