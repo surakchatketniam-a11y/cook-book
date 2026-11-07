@@ -10,7 +10,7 @@ function renderPrep(selected, items) {
     [...document.querySelectorAll("#prep-content input:checked")].map((x) => x.dataset.prepKey),
   );
   document.querySelector("#prep-content").innerHTML =
-    `<p>สรุปจาก ${fmt(selected.length)} เมนู · ${fmt(selected.reduce((sum, r) => sum + quantity(state.plan[r.id]), 0))} กล่อง</p><h3>วัตถุดิบที่ต้องเตรียม</h3><ul class="prep-items">${items.map((item) => `<li><label><input type="checkbox" data-prep-key="${encodeURIComponent(item.key)}" ${done.has(encodeURIComponent(item.key)) ? "checked" : ""}><span>${item.text}</span></label></li>`).join("")}</ul><h3>เตรียมตามเมนู</h3><div class="prep-recipes">${selected.map((r) => `<article><h4>${r.name} · ${fmt(quantity(state.plan[r.id]))} กล่อง</h4><p>${r.prep}</p></article>`).join("")}</div><p class="small">ปริมาณเป็นการคูณสูตรต่อกล่อง ควรตรวจและปรับตามวิธีทำจริง โดยเฉพาะเมื่อปรุงครั้งละมาก ๆ คำแนะนำการเตรียมเป็นแนวทางของแต่ละสูตร</p>`;
+    `<p>สรุปจาก ${fmt(selected.length)} เมนู · ${fmt(selected.reduce((sum, r) => sum + quantity(state.plan[r.id]), 0))} จาน/กล่อง</p><h3>วัตถุดิบที่ต้องเตรียม</h3><ul class="prep-items">${items.map((item) => `<li><label><input type="checkbox" data-prep-key="${encodeURIComponent(item.key)}" ${done.has(encodeURIComponent(item.key)) ? "checked" : ""}><span>${item.text}</span></label></li>`).join("")}</ul><h3>เตรียมตามเมนู</h3><div class="prep-recipes">${selected.map((r) => `<article><h4>${r.name} · ${fmt(quantity(state.plan[r.id]))} จาน/กล่อง</h4><p>${r.prep}</p></article>`).join("")}</div><p class="small">ปริมาณเป็นการคูณสูตรต่อจาน/กล่อง ควรตรวจและปรับตามวิธีทำจริง โดยเฉพาะเมื่อปรุงครั้งละมาก ๆ คำแนะนำการเตรียมเป็นแนวทางของแต่ละสูตร</p>`;
 }
 document.querySelector("#print-prep").addEventListener("click", () => {
   const selected = recipes.filter((r) => state.plan[r.id]);
@@ -20,7 +20,7 @@ document.querySelector("#print-prep").addEventListener("click", () => {
       [...document.querySelectorAll("#prep-content input:checked")].map((x) => x.dataset.prepKey),
     );
   document.querySelector("#print-sheet").innerHTML =
-    `<header class="print-header"><div><p class="print-brand">ครัวอาหารไทย · สูตรทำขาย</p><h1>ใบเตรียมของก่อนปรุง</h1><p>${fmt(selected.length)} เมนู · ${fmt(selected.reduce((sum, r) => sum + quantity(state.plan[r.id]), 0))} กล่อง</p></div><div class="print-date">วันที่ __________________</div></header><section class="print-ingredients"><h2>วัตถุดิบที่ต้องเตรียม</h2><ul>${items.map((item) => `<li><span class="print-check">${done.has(encodeURIComponent(item.key)) ? "✓" : ""}</span><span>${item.text}</span></li>`).join("")}</ul></section><section class="print-method"><h2>เตรียมตามเมนู</h2>${selected.map((r) => `<article><h3>${r.name} · ${fmt(quantity(state.plan[r.id]))} กล่อง</h3><p>${r.prep}</p></article>`).join("")}<p class="print-note">ปริมาณคูณตามสูตรต่อกล่อง ควรตรวจและปรับตามวิธีทำจริง โดยเฉพาะเมื่อปรุงครั้งละมาก ๆ</p></section>`;
+    `<header class="print-header"><div><p class="print-brand">ครัวอาหารไทย · สูตรทำขาย</p><h1>ใบเตรียมของก่อนปรุง</h1><p>${fmt(selected.length)} เมนู · ${fmt(selected.reduce((sum, r) => sum + quantity(state.plan[r.id]), 0))} จาน/กล่อง</p></div><div class="print-date">วันที่ __________________</div></header><section class="print-ingredients"><h2>วัตถุดิบที่ต้องเตรียม</h2><ul>${items.map((item) => `<li><span class="print-check">${done.has(encodeURIComponent(item.key)) ? "✓" : ""}</span><span>${item.text}</span></li>`).join("")}</ul></section><section class="print-method"><h2>เตรียมตามเมนู</h2>${selected.map((r) => `<article><h3>${r.name} · ${fmt(quantity(state.plan[r.id]))} จาน/กล่อง</h3><p>${r.prep}</p></article>`).join("")}<p class="print-note">ปริมาณคูณตามสูตรต่อจาน/กล่อง ควรตรวจและปรับตามวิธีทำจริง โดยเฉพาะเมื่อปรุงครั้งละมาก ๆ</p></section>`;
   window.print();
 });
 const escapeHTML = (value) =>
@@ -218,7 +218,7 @@ document.querySelector("#print-list").addEventListener("click", () => {
   const list = shoppingItems();
   const total = selected.reduce((sum, r) => sum + quantity(state.plan[r.id]), 0);
   document.querySelector("#print-sheet").innerHTML =
-    `<header class="print-header"><div><p class="print-brand">ครัวอาหารไทย · สูตรทำขาย</p><h1>รายการซื้อวัตถุดิบ</h1><p>เตรียมวัตถุดิบสำหรับ ${fmt(selected.length)} เมนู · ${fmt(total)} กล่อง</p></div><div class="print-date">วันที่ __________________</div></header><section class="print-recipes"><h2>เมนูที่เลือก</h2><ul>${selected.map((r) => `<li><span>${r.name}</span><b>${fmt(quantity(state.plan[r.id]))} กล่อง</b></li>`).join("")}</ul></section><section class="print-ingredients"><h2>วัตถุดิบที่ต้องเตรียม</h2><p>ทำเครื่องหมายเมื่อจัดเตรียมหรือซื้อแล้ว</p>${[
+    `<header class="print-header"><div><p class="print-brand">ครัวอาหารไทย · สูตรทำขาย</p><h1>รายการซื้อวัตถุดิบ</h1><p>เตรียมวัตถุดิบสำหรับ ${fmt(selected.length)} เมนู · ${fmt(total)} จาน/กล่อง</p></div><div class="print-date">วันที่ __________________</div></header><section class="print-recipes"><h2>เมนูที่เลือก</h2><ul>${selected.map((r) => `<li><span>${r.name}</span><b>${fmt(quantity(state.plan[r.id]))} จาน/กล่อง</b></li>`).join("")}</ul></section><section class="print-ingredients"><h2>วัตถุดิบที่ต้องเตรียม</h2><p>ทำเครื่องหมายเมื่อจัดเตรียมหรือซื้อแล้ว</p>${[
       "เนื้อสัตว์และไข่",
       "ผักสด",
       "เครื่องปรุงและอื่น ๆ",

@@ -259,7 +259,7 @@ function renderPlan() {
     ? selected
         .map(
           (r) =>
-            `<div class="plan-row"><strong>${r.name}</strong><label>จำนวนกล่อง <input type="number" min="1" max="10000" step="1" value="${state.plan[r.id]}" data-plan-qty="${r.id}"></label><button type="button" class="remove-plan" data-remove="${r.id}">นำออก</button></div>`,
+            `<div class="plan-row"><strong>${r.name}</strong><label>จำนวนจาน/กล่อง <input type="number" min="1" max="10000" step="1" value="${state.plan[r.id]}" data-plan-qty="${r.id}"></label><button type="button" class="remove-plan" data-remove="${r.id}">นำออก</button></div>`,
         )
         .join("")
     : '<p class="empty-plan">ยังไม่มีเมนูในรายการ กดเพิ่มลงรายการซื้อที่การ์ดเมนูหรือในหน้าสูตร <a href="#recipes">เลือกเมนูที่อยากทำ →</a></p>';
@@ -284,7 +284,7 @@ function renderPlan() {
       fmt(shoppingTotal()) +
       ' บาท</strong></div><section class="shopping-comparison" id="shopping-comparison" aria-live="polite">' +
       comparisonHTML() +
-      '</section><p class="small">ยอดรวมคิดจากทุกราคาที่กรอก ราคาและเครื่องหมายติ๊กจะคงเดิมเมื่อเปลี่ยนจำนวนกล่อง โปรดตรวจว่าครอบคลุมปริมาณใหม่หรือไม่</p>'
+      '</section><p class="small">ยอดรวมคิดจากทุกราคาที่กรอก ราคาและเครื่องหมายติ๊กจะคงเดิมเมื่อเปลี่ยนจำนวนจาน/กล่อง โปรดตรวจว่าครอบคลุมปริมาณใหม่หรือไม่</p>'
     : "";
   document.querySelector("#copy-list").hidden = !items.length;
   document.querySelector("#print-list").hidden = !items.length;

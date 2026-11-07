@@ -15,7 +15,7 @@ function load(saved) {
   dom.window.eval(
     read('data.js') +
       APP_FILES.map((f) => read(`js/${f}.js`)).join('\n') +
-      ';window.__t={recipes,shoppingItems,shoppingTotal,shoppingBudget,recipeCost,costItems,migrateCosts,validBackup,recipeAllergens,openRecipe,save,refreshBackupNote,state:()=>state,doc:document};'
+      ';window.__t={recipes,shoppingItems,shoppingTotal,shoppingBudget,recipeCost,recipeTotalMinutes,recipeTimeText,costItems,migrateCosts,validBackup,recipeAllergens,openRecipe,save,refreshBackupNote,state:()=>state,doc:document};'
   );
   const t = dom.window.__t;
   return { ...t, window: dom.window, plan: (n) => (t.state().plan[t.recipes[0].id] = n) };
@@ -150,4 +150,42 @@ test('legacy backup migration leaves untouched recipes and new saved layouts int
   const fresh = {costSchemaVersion:2,costs:{27:{values:[20,14,4]}}};
   w.migrateCosts(fresh);
   assert.strictEqual(fresh.costs[27].legacyCombined, undefined);
+});
+
+
+test('recipe times use estimated prep and cooking or the complete legacy estimate', () => {
+  const w = load();
+  assert.strictEqual(w.recipeTotalMinutes({prepTime: 12, cookTime: 18, time: '99 นาที'}), 30);
+  assert.match(w.recipeTimeText({prepTime: 12, cookTime: 18}), /เตรียม 12 นาที.*ปรุง 18 นาที.*รวม 30 นาที/);
+  assert.strictEqual(w.recipeTotalMinutes({time: '50 นาที + แช่ 4 ชั่วโมง'}), 290);
+  assert.strictEqual(w.recipeTotalMinutes({prepTime: 10, time: '25 นาที'}), 25);
+  w.doc.querySelector('#sort').value = 'time';
+  w.doc.querySelector('#sort').dispatchEvent(new w.window.Event('change'));
+  const ids = [...w.doc.querySelectorAll('#grid .card')].map(x => Number(x.dataset.id));
+  const times = ids.map(id => w.recipeTotalMinutes(w.recipes.find(r => r.id === id)));
+  assert.ok(times.every((time, i) => !i || times[i-1] <= time));
+});
+
+test('portion selector scales ingredients and describes batch cooking', () => {
+  const w = load();
+  w.openRecipe(w.recipes[0]);
+  const qty = w.doc.querySelector('#quantity');
+  assert.match(qty.parentElement.textContent, /จาน\/กล่อง/);
+  const before = w.doc.querySelector('#scaled-ingredients').textContent;
+  qty.value = 10;
+  qty.dispatchEvent(new w.window.Event('input', {bubbles: true}));
+  assert.notStrictEqual(w.doc.querySelector('#scaled-ingredients').textContent, before);
+  assert.strictEqual(w.doc.querySelector('#batch-warning').hidden, false);
+  assert.match(w.doc.querySelector('#batch-warning').textContent, /ชิมปรับ/);
+});
+
+
+test('the first twenty recipes show separate estimated times', () => {
+  const w = load();
+  for (const r of w.recipes.slice(0, 20)) {
+    assert.ok(Number.isFinite(r.prepTime) && Number.isFinite(r.cookTime));
+    assert.match(w.recipeTimeText(r), /ประมาณ: เตรียม .*ปรุง .*รวม/);
+  }
+  w.openRecipe(w.recipes[0]);
+  assert.match(w.doc.querySelector('#detail').textContent, /เวลาเป็นเพียงประมาณการ/);
 });

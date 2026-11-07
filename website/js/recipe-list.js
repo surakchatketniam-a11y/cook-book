@@ -1,4 +1,17 @@
 const fmt = (n) => new Intl.NumberFormat("th-TH", { maximumFractionDigits: 2 }).format(n);
+// Preparation and cooking times are estimates in minutes; retain legacy times when absent.
+function recipeTotalMinutes(r) {
+  if (Number.isFinite(r.prepTime) && r.prepTime >= 0 && Number.isFinite(r.cookTime) && r.cookTime >= 0)
+    return r.prepTime + r.cookTime;
+  const hours = /(?:แช่\s*)?(\d+)\s*ชั่วโมง/.exec(r.time || ""),
+    minutes = /(\d+)\s*นาที/.exec(r.time || "");
+  return hours || minutes ? (hours ? Number(hours[1]) * 60 : 0) + (minutes ? Number(minutes[1]) : 0) : Infinity;
+}
+function recipeTimeText(r) {
+  if (Number.isFinite(r.prepTime) && r.prepTime >= 0 && Number.isFinite(r.cookTime) && r.cookTime >= 0)
+    return `ประมาณ: เตรียม ${fmt(r.prepTime)} นาที · ปรุง ${fmt(r.cookTime)} นาที · รวม ${fmt(recipeTotalMinutes(r))} นาที`;
+  return `เวลาตามสูตร ${r.time}`;
+}
 function recipeCost(r) {
   const c = state.costs[r.id] || {},
     base = costItems(r).reduce((sum, item, i) => sum + (c.values?.[i] ?? item.value), 0) + (c.other ?? 0);
@@ -32,14 +45,14 @@ function render() {
   const sortKey = document.querySelector("#sort").value;
   if (sortKey === "cost") found.sort((a, b) => recipeCost(a) - recipeCost(b) || a.id - b.id);
   if (sortKey === "time")
-    found.sort((a, b) => parseInt(a.time, 10) - parseInt(b.time, 10) || a.id - b.id);
+    found.sort((a, b) => recipeTotalMinutes(a) - recipeTotalMinutes(b) || a.id - b.id);
   count.textContent = `${found.length} เมนู`;
   empty.hidden = found.length !== 0;
   grid.innerHTML = found
     .map((r) => {
       const planned = state.plan[r.id] ? quantity(state.plan[r.id]) : 0,
         marginPct = state.costs[r.id] ? recipeMarginPercent(r) : null;
-      return `<article class="card" data-id="${r.id}"><button type="button" class="card-main" aria-label="ดูสูตร ${r.name}"><img src="images/${String(r.id).padStart(2, "0")}-480.webp" srcset="images/${String(r.id).padStart(2, "0")}-480.webp 480w, images/${String(r.id).padStart(2, "0")}.webp 900w" sizes="(max-width: 700px) 100vw, 33vw" width="480" height="320" alt="ภาพประกอบ ${r.name}" loading="lazy"><div class="card-body"><div class="card-top"><span>RECIPE ${String(r.id).padStart(2, "0")}</span><span>${r.time}</span></div><h3>${r.name}</h3><div class="card-bottom"><span>${state.costs[r.id] ? "ต้นทุนของคุณ" : "ต้นทุนโดยประมาณ"} <b>${fmt(recipeCost(r))} บาท</b>${marginPct !== null ? ` <small class="card-margin">(ส่วนต่าง ${fmt(marginPct)}%)</small>` : ""}</span><span>ดูสูตร ↗</span></div></div></button><div class="card-actions"><button type="button" class="card-favorite" data-action="favorite" aria-pressed="${state.favorites.includes(r.id)}" aria-label="${state.favorites.includes(r.id) ? "นำออกจากเมนูโปรด" : "บันทึกเมนูโปรด"} ${r.name}">${state.favorites.includes(r.id) ? "★ โปรด" : "☆ โปรด"}</button>${planned ? `<div class="card-plan-stepper" role="group" aria-label="จำนวนกล่องในรายการซื้อสำหรับ ${r.name}"><button type="button" class="card-step" data-action="plan-dec" aria-label="${planned === 1 ? "นำออกจากรายการซื้อ" : "ลดจำนวนกล่อง"} ${r.name}">−</button><span class="card-plan-qty">${fmt(planned)} กล่อง</span><button type="button" class="card-step" data-action="plan-inc" aria-label="เพิ่มจำนวนกล่อง ${r.name}">+</button></div>` : `<button type="button" class="card-plan" data-action="plan" aria-label="เพิ่มลงรายการซื้อ ${r.name}">+ เพิ่มลงรายการซื้อ</button>`}</div></article>`;
+      return `<article class="card" data-id="${r.id}"><button type="button" class="card-main" aria-label="ดูสูตร ${r.name}"><img src="images/${String(r.id).padStart(2, "0")}-480.webp" srcset="images/${String(r.id).padStart(2, "0")}-480.webp 480w, images/${String(r.id).padStart(2, "0")}.webp 900w" sizes="(max-width: 700px) 100vw, 33vw" width="480" height="320" alt="ภาพประกอบ ${r.name}" loading="lazy"><div class="card-body"><div class="card-top"><span>RECIPE ${String(r.id).padStart(2, "0")}</span><span>${recipeTimeText(r)}</span></div><h3>${r.name}</h3><div class="card-bottom"><span>${state.costs[r.id] ? "ต้นทุนของคุณ" : "ต้นทุนโดยประมาณ"} <b>${fmt(recipeCost(r))} บาท</b>${marginPct !== null ? ` <small class="card-margin">(ส่วนต่าง ${fmt(marginPct)}%)</small>` : ""}</span><span>ดูสูตร ↗</span></div></div></button><div class="card-actions"><button type="button" class="card-favorite" data-action="favorite" aria-pressed="${state.favorites.includes(r.id)}" aria-label="${state.favorites.includes(r.id) ? "นำออกจากเมนูโปรด" : "บันทึกเมนูโปรด"} ${r.name}">${state.favorites.includes(r.id) ? "★ โปรด" : "☆ โปรด"}</button>${planned ? `<div class="card-plan-stepper" role="group" aria-label="จำนวนจาน/กล่องในรายการซื้อสำหรับ ${r.name}"><button type="button" class="card-step" data-action="plan-dec" aria-label="${planned === 1 ? "นำออกจากรายการซื้อ" : "ลดจำนวนจาน/กล่อง"} ${r.name}">−</button><span class="card-plan-qty">${fmt(planned)} จาน/กล่อง</span><button type="button" class="card-step" data-action="plan-inc" aria-label="เพิ่มจำนวนจาน/กล่อง ${r.name}">+</button></div>` : `<button type="button" class="card-plan" data-action="plan" aria-label="เพิ่มลงรายการซื้อ ${r.name}">+ เพิ่มลงรายการซื้อ</button>`}</div></article>`;
     })
     .join("");
 }

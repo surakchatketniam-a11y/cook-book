@@ -1,6 +1,8 @@
 const recipes = [
   {
     id: 1,
+    prepTime: 10,
+    cookTime: 8,
     name: "ข้าวกะเพราไก่ไข่ดาว",
     time: "15 นาที",
     ingredients: [
@@ -36,6 +38,8 @@ const recipes = [
   },
   {
     id: 2,
+    prepTime: 8,
+    cookTime: 7,
     name: "ข้าวกะเพราหมูสับ",
     time: "15 นาที",
     ingredients: [
@@ -68,6 +72,8 @@ const recipes = [
   },
   {
     id: 3,
+    prepTime: 10,
+    cookTime: 7,
     name: "ข้าวไก่กระเทียม",
     time: "15 นาที",
     ingredients: [
@@ -101,6 +107,8 @@ const recipes = [
   },
   {
     id: 4,
+    prepTime: 10,
+    cookTime: 8,
     name: "ข้าวหมูผัดพริกแกง",
     time: "15 นาที",
     ingredients: [
@@ -133,6 +141,8 @@ const recipes = [
   },
   {
     id: 5,
+    prepTime: 12,
+    cookTime: 8,
     name: "ข้าวไก่ผัดขิง",
     time: "15 นาที",
     ingredients: [
@@ -166,6 +176,8 @@ const recipes = [
   },
   {
     id: 6,
+    prepTime: 12,
+    cookTime: 8,
     name: "ข้าวไก่ผัดเม็ดมะม่วง",
     time: "20 นาที",
     ingredients: [
@@ -200,6 +212,8 @@ const recipes = [
   },
   {
     id: 7,
+    prepTime: 10,
+    cookTime: 7,
     name: "ข้าวหมูผัดน้ำมันหอย",
     time: "15 นาที",
     ingredients: [
@@ -232,6 +246,8 @@ const recipes = [
   },
   {
     id: 8,
+    prepTime: 10,
+    cookTime: 7,
     name: "ข้าวหมูผัดพริกหยวก",
     time: "15 นาที",
     ingredients: [
@@ -264,6 +280,8 @@ const recipes = [
   },
   {
     id: 9,
+    prepTime: 8,
+    cookTime: 7,
     name: "ข้าวไข่เจียวหมูสับ",
     time: "10 นาที",
     ingredients: [
@@ -296,6 +314,8 @@ const recipes = [
   },
   {
     id: 10,
+    prepTime: 8,
+    cookTime: 7,
     name: "ข้าวไข่ข้นกุ้ง",
     time: "15 นาที",
     ingredients: [
@@ -327,6 +347,8 @@ const recipes = [
   },
   {
     id: 11,
+    prepTime: 10,
+    cookTime: 8,
     name: "ข้าวผัดหมู",
     time: "15 นาที",
     ingredients: [
@@ -361,6 +383,8 @@ const recipes = [
   },
   {
     id: 12,
+    prepTime: 10,
+    cookTime: 8,
     name: "ข้าวผัดกุ้ง",
     time: "15 นาที",
     ingredients: [
@@ -394,6 +418,8 @@ const recipes = [
   },
   {
     id: 13,
+    prepTime: 10,
+    cookTime: 8,
     name: "ข้าวไก่ผัดพริกเผา",
     time: "15 นาที",
     ingredients: [
@@ -426,6 +452,8 @@ const recipes = [
   },
   {
     id: 14,
+    prepTime: 12,
+    cookTime: 12,
     name: "ข้าวแกงเขียวหวานไก่",
     time: "25 นาที",
     ingredients: [
@@ -459,6 +487,8 @@ const recipes = [
   },
   {
     id: 15,
+    prepTime: 10,
+    cookTime: 15,
     name: "ข้าวแกงพะแนงหมู",
     time: "25 นาที",
     ingredients: [
@@ -491,6 +521,8 @@ const recipes = [
   },
   {
     id: 16,
+    prepTime: 10,
+    cookTime: 30,
     name: "ข้าวไข่พะโล้หมู",
     time: "35 นาที",
     ingredients: [
@@ -526,6 +558,8 @@ const recipes = [
   },
   {
     id: 17,
+    prepTime: 10,
+    cookTime: 8,
     name: "ข้าวไก่ผัดข้าวโพดอ่อน",
     time: "15 นาที",
     ingredients: [
@@ -558,6 +592,8 @@ const recipes = [
   },
   {
     id: 18,
+    prepTime: 8,
+    cookTime: 7,
     name: "ข้าวหมูผัดกะหล่ำปลี",
     time: "15 นาที",
     ingredients: [
@@ -589,6 +625,8 @@ const recipes = [
   },
   {
     id: 19,
+    prepTime: 10,
+    cookTime: 8,
     name: "ข้าวไก่ผัดผงกะหรี่",
     time: "20 นาที",
     ingredients: [
@@ -623,6 +661,8 @@ const recipes = [
   },
   {
     id: 20,
+    prepTime: 10,
+    cookTime: 8,
     name: "ข้าวหมูผัดไข่เค็ม",
     time: "20 นาที",
     ingredients: [
