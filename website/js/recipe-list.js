@@ -1,7 +1,7 @@
 const fmt = (n) => new Intl.NumberFormat("th-TH", { maximumFractionDigits: 2 }).format(n);
 function recipeCost(r) {
   const c = state.costs[r.id] || {},
-    base = r.cost.reduce((sum, item, i) => sum + (c.values?.[i] ?? item.value), 0) + (c.other ?? 0);
+    base = costItems(r).reduce((sum, item, i) => sum + (c.values?.[i] ?? item.value), 0) + (c.other ?? 0);
   return (
     base +
     ["labor", "utilities", "packaging"].reduce(
@@ -25,7 +25,7 @@ function render() {
       (!favoritesOnly || state.favorites.includes(r.id)) &&
       (filter === "ทั้งหมด" ||
         (["แกง", "ต้ม", "ยำ", "ขนม"].includes(filter)
-          ? (r.category === filter || (filter === "แกง" && r.name.includes("แกง")))
+          ? r.category === filter || (filter === "แกง" && r.name.includes("แกง"))
           : r.ingredients.some((x) => x.includes(filter)))) &&
       (r.name + " " + r.ingredients.join(" ")).toLowerCase().includes(query),
   );

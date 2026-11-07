@@ -104,7 +104,9 @@ function validBackup(data) {
         recipes.some((r) => String(r.id) === k) &&
         obj(c) &&
         Object.entries(c).every(([field, v]) =>
-          field === "values"
+          field === "legacyCombined"
+            ? typeof v === "boolean" && x.costSchemaVersion === 2 && (Number(k) >= 21 && Number(k) <= 23 || Number(k) >= 27 && Number(k) <= 56)
+            : field === "values"
             ? Array.isArray(v) && v.every(num)
             : ["other", "sale", "fee", "target", "labor", "utilities", "packaging"].includes(
                 field,
@@ -126,6 +128,7 @@ document.querySelector("#import-data").addEventListener("change", async (e) => {
       return;
     state = data.state;
     state.channels = state.channels || [];
+    migrateCosts(state);
     state.shoppingKeysVersion = state.shoppingKeysVersion === 3 ? 3 : undefined;
     migrateShopping();
     save();

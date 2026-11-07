@@ -35,6 +35,7 @@ try {
       settings: saved.settings || {},
       channels: Array.isArray(saved.channels) ? saved.channels : [],
       shoppingKeysVersion: saved.shoppingKeysVersion,
+      costSchemaVersion: saved.costSchemaVersion,
     };
 } catch (e) {}
 function save() {
@@ -48,3 +49,23 @@ function save() {
   if (typeof refreshBackupNote === "function") refreshBackupNote();
 }
 const quantity = (n) => Math.max(1, Math.min(10000, Math.floor(Number(n) || 1)));
+
+// Legacy recipes stored one combined ingredient amount followed by packaging.
+function migrateCosts(target) {
+  if (target.costSchemaVersion === 2) return;
+  for (const [id, cost] of Object.entries(target.costs || {})) {
+    const n = Number(id);
+    if ((n >= 21 && n <= 23 || n >= 27 && n <= 56) && cost && Array.isArray(cost.values))
+      cost.legacyCombined = true;
+  }
+  target.costSchemaVersion = 2;
+}
+function costItems(r) {
+  if (!state.costs[r.id]?.legacyCombined) return r.cost;
+  const packaging = r.cost.find((item) => item.name === "ภาชนะ");
+  return [
+    { name: "วัตถุดิบและเครื่องปรุง (ค่าเดิม)", value: r.cost.filter((item) => item !== packaging).reduce((sum, item) => sum + item.value, 0) },
+    { name: "ภาชนะ", value: packaging?.value ?? 0 },
+  ];
+}
+migrateCosts(state);
